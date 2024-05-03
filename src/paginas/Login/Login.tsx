@@ -29,6 +29,7 @@ function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
       ...usuarioLogin,
       [e.target.name]: e.target.value
   })
+  console.log(`Email: ${usuarioLogin.usuario}`)
 }
 
 function login(e: ChangeEvent<HTMLFormElement>) {
