@@ -8,7 +8,7 @@ import UsuarioLogin from '../../models/UsuarioLogin';
 import { RotatingLines } from 'react-loader-spinner';
 
 function Login() {
-  const navigate = useNavigate();
+  let navigate = useNavigate();
 
   const [usuarioLogin, setUsuarioLogin] = useState<UsuarioLogin>(
     {} as UsuarioLogin
@@ -29,7 +29,6 @@ function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
       ...usuarioLogin,
       [e.target.name]: e.target.value
   })
-  console.log(`Email: ${usuarioLogin.usuario}`)
 }
 
 function login(e: ChangeEvent<HTMLFormElement>) {

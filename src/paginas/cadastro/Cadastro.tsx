@@ -3,10 +3,15 @@ import './Cadastro.css'
 import { useNavigate } from 'react-router-dom'
 import Usuario from '../../models/Usuario'
 import { cadastrarUsuario } from '../../services/Service'
+import { toastAlerta } from '../../util/toastAlert'
+import { RotatingLines } from 'react-loader-spinner'
+
 
 function Cadastro() {
 
   let navigate = useNavigate()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [confirmaSenha, setConfirmaSenha] = useState<string>("")
 
@@ -51,20 +56,23 @@ function Cadastro() {
     e.preventDefault()
 
     if (confirmaSenha === usuario.senha && usuario.senha.length >= 8) {
+      setIsLoading(true)
 
       try {
         await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuarioResposta)
-        alert('Usuário cadastrado com sucesso')
+        toastAlerta('Usuário cadastrado com sucesso', 'sucesso')
 
       } catch (error) {
-        alert('Erro ao cadastrar o Usuário')
+        toastAlerta('Usuário cadastrado com sucesso', 'sucesso')
       }
 
     } else {
-      alert('Dados inconsistentes. Verifique as informações de cadastro.')
+      toastAlerta('Dados inconsistentes. Verifique as informações de cadastro.', 'erro')
       setUsuario({ ...usuario, senha: "" }) // Reinicia o campo de Senha
       setConfirmaSenha("")                  // Reinicia o campo de Confirmar Senha
     }
+    setIsLoading(false)
+
   }
 
   return (
@@ -138,13 +146,22 @@ function Cadastro() {
               Cancelar
             </button>
             <button className='rounded text-white bg-indigo-400 hover:bg-indigo-900 w-1/2 py-2' type='submit'>
-              Cadastrar
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
-  )
+            {
+                                // Renderização Condicial - Se isLoading for true mostra o componente de carregamento
+                                isLoading ? <RotatingLines
+                                    strokeColor="white"
+                                    strokeWidth="5"
+                                    animationDuration="0.75"
+                                    width="24"
+                                    visible={true}
+                                /> :    // Se não, mostra apenas o Cadastrar
+                                    <span>Cadastrar</span>}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </>
+    )
 }
 
 export default Cadastro
